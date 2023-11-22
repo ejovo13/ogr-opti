@@ -4,10 +4,8 @@ A Golomb ruler is a sequence of non-negative integers such that every difference
 
 """
 
-
-def drop(input: list, index_to_drop: int) -> list:
-    """Helper function to return a list with everything but `input[index_to_drop]`."""
-    return [x for idx, x in enumerate(input) if x != idx]
+def dist(a: int, b: int) -> int:
+    return abs(a - b)
 
 def is_golomb_ruler(sequence: list[int]) -> bool:
     """Verify if a sequence of integers is a golomb ruler.
@@ -22,9 +20,9 @@ def is_golomb_ruler(sequence: list[int]) -> bool:
     differences = set()
 
     for (lhs_index, lhs) in enumerate(sequence):
-        for rhs in drop(sequence, lhs_index):
-            difference = abs(lhs - rhs)
+        for rhs in sequence[(lhs_index + 1):]:
 
+            difference = dist(lhs, rhs)
             # Check if the difference is distinct!
             if difference in differences:
                 return False
@@ -35,6 +33,18 @@ def is_golomb_ruler(sequence: list[int]) -> bool:
 
 class NotGolombRuler(Exception):
     """Indicates that the passed sequence does not satisfy the conditions of a Golomb Ruler."""
+
+
+def generate_golomb_ruler_naive(order: int) -> list[int]:
+    """Naively generate a new golomb ruler with `order` marks."""
+    if order < 1: ValueError("order must be greater than 0")
+    if order == 0: return [0]
+
+    prev = generate_golomb_ruler_naive(order - 1)
+    next = 2 ** order - 1
+    prev.append(next)
+
+    return prev
 
 class GolombRuler:
     """A list of non-negative integers."""
@@ -53,3 +63,8 @@ class GolombRuler:
     def order(self) -> int:
         """Return the order (number of elements in the sequence) of this GolombRuler."""
         return len(self.sequence)
+
+
+
+    def d_plus_e(self) -> str:
+        """Return a string representation of the """
