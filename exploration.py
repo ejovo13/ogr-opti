@@ -68,13 +68,15 @@ def generate_golomb_ruler_improved(order: int) -> list[int]:
 
 
     # Compute the differences
-    distances = compute_distances(prev)
-    candidate_upper_bound = 2 * prev[-1] + 1 # proof in report
+    distances = compute_distances(prev) # O(n^2)
+    candidate_upper_bound = 2 * prev[-1] + 1 # Guarantees that we will accept at least one candidate
 
     def should_accept_candidate(candidate: int) -> bool:
         """Utility function used to check if a candidate should be accepted.
 
         Allows us to skip to the next loop on a false input (otherwise we only break from an inner loop)
+
+        Runs in O(n)
         """
         for i in range(order - 1):
             if dist(candidate, prev[i]) in distances:
@@ -82,7 +84,7 @@ def generate_golomb_ruler_improved(order: int) -> list[int]:
 
         return True
 
-    for c in range(0, candidate_upper_bound + 1):
+    for c in range(prev[-1], candidate_upper_bound + 1):
         # O(n) check to make sure that c != x_i for all i in 1..n
         # we could turn previous into a set to speed up this but that wouldn't
         # change asymptotic complexity
@@ -91,7 +93,7 @@ def generate_golomb_ruler_improved(order: int) -> list[int]:
 
         if should_accept_candidate(c):
             prev.append(c)
-            return sorted(prev)
+            # return sorted(prev)
 
     raise Exception("Implementation Error!!!")
 
