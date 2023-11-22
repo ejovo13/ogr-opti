@@ -76,7 +76,7 @@ def generate_golomb_ruler_improved(order: int) -> list[int]:
 
         Allows us to skip to the next loop on a false input (otherwise we only break from an inner loop)
         """
-        for i in range(order):
+        for i in range(order - 1):
             if dist(candidate, prev[i]) in distances:
                 return False
 
