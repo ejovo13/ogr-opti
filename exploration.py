@@ -93,7 +93,7 @@ def generate_golomb_ruler_improved(order: int) -> list[int]:
 
         if should_accept_candidate(c):
             prev.append(c)
-            # return sorted(prev)
+            return sorted(prev)
 
     raise Exception("Implementation Error!!!")
 
