@@ -1,0 +1,10 @@
+[tool.poetry]
+name = "py-ogr"
+version = "0.1.0"
+description = "A set of utilities to study the Optimal Golomb Ruler problem"
+license = "MIT"
+authors = [
+    "Evan Voyles <evan.voyles@etu.sorbonne-universite.fr"
+]
+[tool.poetry.dependencies]
+appdirs = "^1.4.4"

@@ -2,7 +2,6 @@
 
 # Tasks for generalization:
 # express the distance variables as an upper triangualar matrix?
-option solver cplex;
 
 param upper_bound;
 param order;
