@@ -4,6 +4,8 @@ A Golomb ruler is a sequence of non-negative integers such that every difference
 
 """
 
+from __future__ import annotations
+
 def dist(a: int, b: int) -> int:
     return abs(a - b)
 
@@ -58,7 +60,10 @@ def generate_golomb_ruler_naive(order: int) -> list[int]:
     return prev
 
 def generate_golomb_ruler_improved(order: int) -> list[int]:
-    """Generate a golomb ruler with order `order` using an improved algorithm."""
+    """Generate a golomb ruler with order `order` using an improved algorithm.
+
+    This algorithm runs in O(n^4)
+    """
     if order < 1: ValueError("order must be greater than 0")
     if order == 1: return [0]
     if order == 2: return [0, 1]
@@ -120,3 +125,76 @@ class GolombRuler:
 
     def d_plus_e(self) -> str:
         """Return a string representation of the """
+
+
+    # ---------------------------------------------------------------------------- #
+    #               Functions dealing with upper triangular matrices               #
+    # ---------------------------------------------------------------------------- #
+    def triu_size(self) -> int:
+        """Compute the amount of space needed for a 1-dimensional matrix that encodes the distances between all pairs of marks."""
+        n = self.order()
+        return n * (n - 1) // 2
+
+    def triu_elements_before_row(self, row_index: int) -> int:
+        """Compute the number of elements before our 0-based indexing row.
+
+        Consider the following upper triangular matrix containing the distances between marks in a 3-order golomb ruler:
+        ```
+        i: 0    |   -     d_12    d_13    |
+        i: 1    |   -      -      d_23    |
+        i: 2    |   -      -        -     |
+        ```
+
+        `triu_elements_before_row` computes the number of elements before a certain row. For example,
+        we expect `triu_elements_before_row(1)` -> 2 and `triu_elements_before_row(2)` -> 3
+
+        This function is used to compute the appropriate index for an array encoding the distances between marks.
+        """
+        n = self.order()
+        i = row_index + 1
+        return -half(i * i) + half(i * (2 * n + 1)) - n
+
+    def triu_linear_index(self, row_index: int, col_index: int) -> int:
+        """Compute the linear index for a upper triangular coordinate."""
+        return self.triu_elements_before_row(row_index) + col_index
+
+    def triu_distances(self) -> list[int]:
+        """Compute the distances between every mark of this ruler, storing the results in a 1-d list."""
+        distances: list[int] = [0 for _ in range(self.triu_size())]
+        idx = 0
+
+        for (lhs_idx, lhs) in enumerate(self.sequence):
+            for rhs in self.sequence[(lhs_idx + 1):]:
+                distances[idx] = dist(lhs, rhs)
+                idx += 1
+
+        return distances
+
+    @staticmethod
+    def from_distances(distances: list[int], order: int) -> GolombRuler:
+        """Construct a new GolombRuler given a list of distances.
+
+        Used to read the output of the linear programming formulation.
+        """
+        # Assume that the first mark is 0.
+        marks = [0]
+        marks.extend(distances[:(order - 1)])
+        return GolombRuler(marks)
+
+def half(a: int) -> int:
+    return a // 2
+
+def div(a: int, b: int) -> int:
+    return a // b
+
+
+if __name__ == '__main__':
+    ruler = GolombRuler([0, 1, 3])
+
+    print(ruler.triu_distances())
+
+    ruler = GolombRuler(generate_golomb_ruler_improved(5))
+    print(ruler.triu_distances())
+
+    ruler_copy = GolombRuler.from_distances(ruler.triu_distances(), ruler.order())
+    print(ruler_copy.sequence)
