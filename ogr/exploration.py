@@ -6,6 +6,8 @@ A Golomb ruler is a sequence of non-negative integers such that every difference
 
 from __future__ import annotations
 
+from .exceptions import *
+
 def dist(a: int, b: int) -> int:
     return abs(a - b)
 
@@ -32,11 +34,6 @@ def is_golomb_ruler(sequence: list[int]) -> bool:
                 differences.add(difference)
 
     return True
-
-class NotGolombRuler(Exception):
-    """Indicates that the passed sequence does not satisfy the conditions of a Golomb Ruler."""
-
-
 
 def compute_distances(sequence: list[int]) -> set[int]:
     """Compute the pairwise distances of `sequence` and return the results in a set."""
