@@ -2,12 +2,10 @@
 
 # Tasks for generalization:
 # express the distance variables as an upper triangualar matrix?
-reset;
-
 option solver cplex;
 
-param upper_bound = 10;
-param order = 3;
+param upper_bound;
+param order;
 
 set N = {1..order};
 set V = {1..upper_bound};
