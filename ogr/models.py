@@ -8,6 +8,12 @@ from .ampl import ogr_integer_lp
 from .solvers import AMPLSolver
 from enum import Enum
 from collections.abc import Callable
+from appdirs import user_data_dir
+from random import randint
+from os.path import join, exists
+from os import makedirs, remove
+
+import subprocess
 
 # First check if ampl exists on this machine
 _AMPL_PATH = which("ampl")
@@ -33,7 +39,7 @@ class Formulations(Enum):
 
 
 
-def solve(order: int, upper_bound: int = None, formulation = Formulations.IntegerLinearProgram, solver: AMPLSolver = AMPLSolver.CPLEX) -> GolombRuler:
+def solve(order: int, upper_bound: int = None, formulation = Formulations.IntegerLinearProgram, solver: AMPLSolver = AMPLSolver.CPLEX, timeout_s: float = 60) -> GolombRuler:
     """Attempt to solve an instance of the OGR with `order` marks and """
     if upper_bound is None:
         upper_bound = 2 ** (order - 1) - 1
@@ -41,11 +47,32 @@ def solve(order: int, upper_bound: int = None, formulation = Formulations.Intege
     ampl_source_code_callback = formulation.callback()
 
     source_code = ampl_source_code_callback(order, upper_bound, solver)
+    data_dir = user_data_dir("ogr", "ejovo")
 
-    print(source_code)
+    if not exists(data_dir):
+        makedirs(data_dir)
 
+    tmp_file = join(data_dir, f"tmp_{randint(1, 99999):08}.ampl")
 
+    with open(tmp_file, "w") as file:
+        file.write(source_code)
 
+    arguments = [_AMPL_PATH, tmp_file]
+    output = subprocess.run(arguments, capture_output=True, timeout=timeout_s)
+    solved = output.stdout.decode()
 
+    # Now let's process the output and turn the distances into a GolombRuler.
+    # Find the line that has "d :="   lines = solved.split("\n")
+    lines = solved.split("\n")
+    index = lines.index("d :=")
 
+    # Now only consider the next (order - 1) lines
+    distances = lines[(index + 1):(index + order)]
+    distances = [int(d.split()[-1]) for d in distances]
 
+    ruler = GolombRuler(distances)
+
+    # Remove the tmp file
+    remove(tmp_file)
+
+    return ruler
