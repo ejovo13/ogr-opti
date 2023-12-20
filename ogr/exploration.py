@@ -99,9 +99,13 @@ def generate_golomb_ruler_improved(order: int) -> list[int]:
 
     raise Exception("Implementation Error!!!")
 
+from dataclasses import dataclass
 
+# @dataclass
 class GolombRuler:
-    """A list of non-negative integers."""
+    """A list of non-negative integers such that each pairwise difference is distinct."""
+
+    # sequence: list[int]
 
     def __init__(self, sequence: list[int], assert_golomb_property = True):
         """Construct a new GolombRuler.
@@ -114,14 +118,27 @@ class GolombRuler:
 
         self.sequence = sequence
 
+    def __str__(self) -> str:
+        s = "GolombRuler {\n"
+        s += f"  order:\t{self.order()}\n"
+        s += f"  sequence:\t{self.sequence}\n"
+        s += f"  distances:\t{self.triu_distances()}\n"
+        s += f"  length:\t{self.length()}\n"
+        s += "}"
+
+        return s
+
     def order(self) -> int:
         """Return the order (number of elements in the sequence) of this GolombRuler."""
         return len(self.sequence)
 
+    def length(self) -> int:
+        """The largest distance of our GolombRuler. To return the number of elements, see `GolombRuler.order`."""
+        return max(self.sequence)
 
 
     def d_plus_e(self) -> str:
-        """Return a string representation of the """
+        """Return a string representation of the d plus e model."""
 
 
     # ---------------------------------------------------------------------------- #
@@ -185,13 +202,13 @@ def div(a: int, b: int) -> int:
     return a // b
 
 
-if __name__ == '__main__':
-    ruler = GolombRuler([0, 1, 3])
+def main():
 
-    print(ruler.triu_distances())
+    ruler = GolombRuler([0, 1, 3])
+    print(ruler)
 
     ruler = GolombRuler(generate_golomb_ruler_improved(5))
-    print(ruler.triu_distances())
+    print(ruler)
 
     ruler_copy = GolombRuler.from_distances(ruler.triu_distances(), ruler.order())
-    print(ruler_copy.sequence)
+    print(ruler_copy)
