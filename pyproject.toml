@@ -8,3 +8,8 @@ authors = [
 ]
 [tool.poetry.dependencies]
 appdirs = "^1.4.4"
+
+
+# [tool.poetry.scripts]
+# test = { reference = ""}
+ogr-rust = "^0.1.2"

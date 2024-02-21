@@ -2,7 +2,7 @@
 
 
 from shutil import which
-from .exceptions import AMPLNotFound
+from .exceptions import AMPLNotFound, SolveError, NotGolombRuler
 from .exploration import GolombRuler
 from .ampl import ogr_integer_lp
 from .solvers import AMPLSolver
@@ -63,14 +63,25 @@ def solve(order: int, upper_bound: int = None, formulation = Formulations.Intege
 
     # Now let's process the output and turn the distances into a GolombRuler.
     # Find the line that has "d :="   lines = solved.split("\n")
-    lines = solved.split("\n")
-    index = lines.index("d :=")
+    try:
+        lines = solved.split("\n")
+        index = lines.index("d :=")
 
-    # Now only consider the next (order - 1) lines
-    distances = lines[(index + 1):(index + order)]
-    distances = [int(d.split()[-1]) for d in distances]
+        # Now only consider the next (order - 1) lines
+        distances = lines[(index + 1):(index + order)]
+        distances = [int(d.split()[-1]) for d in distances]
 
-    ruler = GolombRuler(distances)
+        ruler = GolombRuler.from_distances(distances, order)
+
+    except NotGolombRuler as ngr:
+
+        raise SolveError(f"Error when processing problem with order {order} and upper_bound: {upper_bound}. AMPL output: {solved} AMPL source code: {source_code}")
+
+    except:
+
+        # raise SolveError(solved)
+        remove(tmp_file)
+        return GolombRuler([0])
 
     # Remove the tmp file
     remove(tmp_file)

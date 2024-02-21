@@ -10,3 +10,6 @@ class AMPLNotFound(Exception):
 
 class FormulationNotImplemented(Exception):
     """Used to indicate that the formulation has not yet been implemented in AMPL."""
+
+class SolveError(Exception):
+    """Used to indicate that something went wrong on AMPL's side of things."""
