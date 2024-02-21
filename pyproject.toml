@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "py-ogr"
+name = "ogr-py"
 version = "0.1.0"
 description = "A set of utilities to study the Optimal Golomb Ruler problem"
 license = "MIT"
@@ -26,6 +26,7 @@ solve_demo = "run:solve"
 ruler = "ogr.exploration:main"
 gen = "run:generate_rulers"
 solve = "ogr.scripts:solve"
+ogr = "ogr_main:main"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.3"
