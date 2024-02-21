@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ogr-py"
-version = "0.1.1"
+version = "0.1.2"
 description = "A set of utilities to study the Optimal Golomb Ruler problem"
 license = "MIT"
 authors = [
@@ -31,3 +31,8 @@ ogr = "ogr_main:main"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.3"
+
+[tool.ruff.lint]
+ignore-init-module-imports = true
+fixable = ["I"]
+select = ["E4", "E7", "E9", "F", "I"]

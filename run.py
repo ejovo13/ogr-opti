@@ -1,6 +1,6 @@
-import ogr
 import polars
-import altair as alt
+
+import ogr
 
 
 def solve():
@@ -10,7 +10,7 @@ def solve():
 
     for order in range(2, max_order):
         ruler = ogr.solve(order, verbose=True)
-        print()
+        print(ruler)
 
 
 def generate_rulers():
@@ -31,10 +31,10 @@ def generate_rulers():
     improved_orders = [ruler.order() for ruler in improved_rulers]
     improved_lengths = [ruler.length() for ruler in improved_rulers]
 
-    print(f"Naive generation:")
+    print("Naive generation:")
     print(naive_rulers[-1])
 
-    print(f"Improved generation:")
+    print("Improved generation:")
     print(improved_rulers[-1])
 
     df_naive = polars.DataFrame(dict(order=naive_orders, length=naive_lengths))

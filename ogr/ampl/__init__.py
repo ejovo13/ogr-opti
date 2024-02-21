@@ -1,6 +1,6 @@
 """A colllection of the different formulations needed to solve OGR."""
 
-from ..solvers import *
+from ..solvers import AMPLSolver
 
 
 def ampl_choose_solver(solver: AMPLSolver) -> str:

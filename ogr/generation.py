@@ -6,7 +6,7 @@ A Golomb ruler is a sequence of non-negative integers such that every difference
 
 from __future__ import annotations
 
-from .exceptions import *
+from .exceptions import ImplementationError
 from .utils import compute_distances, dist
 
 
@@ -70,7 +70,7 @@ def generate_golomb_ruler_improved(order: int) -> list[int]:
             prev.append(c)
             return sorted(prev)
 
-    raise Exception("Implementation Error!!!")
+    raise ImplementationError("Implementation Error!!!")
 
 
 # def main():

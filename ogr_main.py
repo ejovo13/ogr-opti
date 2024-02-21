@@ -2,7 +2,8 @@
 
 
 import argparse
-import sys
+import random
+
 import ogr_rust as ogr
 
 
@@ -61,7 +62,7 @@ def main():
     try:
         if args.subcommand is None:
             pass
-    except:
+    except Exception:
         parser.print_help()
         exit(1)
 
@@ -112,7 +113,7 @@ def main():
 
     elif args.subcommand == "ls":
         print("  Id")
-        print(f"-------")
+        print("-------")
         for i in range(args.start, args.start + args.n):
             if args.state:
                 r = ogr.Ruler.from_id(i)
@@ -126,8 +127,6 @@ def main():
 # ---------------------------------------------------------------------------- #
 # Functions to get some random rulers
 # What's the number to length calculation?
-import math
-import random
 
 """Return the id range of rulers with length `length`."""
 

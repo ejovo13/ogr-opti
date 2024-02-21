@@ -1,8 +1,9 @@
 """Functions that are designed to be entry points to `poetry run`."""
 
 from argparse import ArgumentParser
-from .exceptions import *
+
 from . import models
+from .exceptions import OrderTooLarge
 
 
 def solve():
@@ -37,7 +38,7 @@ def solve():
 
     try:
         formulation = models.Formulations.from_str(args.formulation)
-    except:
+    except Exception:
         print(
             f"Oops! Problem formulation: '{args.formulation}' not recognized! Possible values: {{'ilp', 'ilpr', 'cp', 'qp'}}"
         )
@@ -46,3 +47,4 @@ def solve():
     ruler = models.solve(
         args.order, args.upper_bound, formulation, verbose=args.verbose
     )
+    print(ruler)

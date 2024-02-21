@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from .generation import *
-from .utils import *
 from .exceptions import NotGolombRuler
+from .generation import generate_golomb_ruler_improved, generate_golomb_ruler_naive
+from .utils import dist, half, is_golomb_ruler
 
 
 class GolombRuler:

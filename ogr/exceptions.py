@@ -19,3 +19,7 @@ class SolveError(Exception):
 
 class OrderTooLarge(Exception):
     """Used when we are requesting to solve infeasible ogr problems."""
+
+
+class ImplementationError(Exception):
+    """Used to indicate that the program's code is not correct."""
