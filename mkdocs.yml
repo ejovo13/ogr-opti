@@ -1,0 +1,13 @@
+site_name: Optimal Golomb Rulers
+repo_url: https://github.com/ejovo13/ogr-opti
+site_description: Documentation for the OGR python interface
+
+nav:
+  - Chapter 0: 'index.md'
+
+theme:
+  name: material
+
+plugins:
+- search
+- mkdocstrings

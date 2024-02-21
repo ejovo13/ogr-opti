@@ -1,13 +1,14 @@
 [tool.poetry]
 name = "ogr-py"
-version = "0.1.0"
+version = "0.1.1"
 description = "A set of utilities to study the Optimal Golomb Ruler problem"
 license = "MIT"
 authors = [
     "Evan Voyles <evan.voyles@etu.sorbonne-universite.fr>"
 ]
 packages = [
-    { include = "ogr" }
+    { include = "ogr" },
+    { include = "ogr_main.py" }
 ]
 
 [tool.poetry.dependencies]

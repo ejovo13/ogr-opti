@@ -6,17 +6,20 @@ from .generation import *
 from .utils import *
 from .exceptions import NotGolombRuler
 
+
 class GolombRuler:
     """A list of non-negative integers such that each pairwise difference is distinct."""
 
-    def __init__(self, sequence: list[int], assert_golomb_property = True):
+    def __init__(self, sequence: list[int], assert_golomb_property=True):
         """Construct a new GolombRuler.
 
         Raises `NotGolombRuler` if the input sequence is malformed.
         """
         if assert_golomb_property:
             if not is_golomb_ruler(sequence):
-                raise NotGolombRuler(f"Input sequence: {sequence} does not satisfy the GolombRuler conditions.")
+                raise NotGolombRuler(
+                    f"Input sequence: {sequence} does not satisfy the GolombRuler conditions."
+                )
 
         self.sequence = sequence
 
@@ -24,24 +27,28 @@ class GolombRuler:
         s = "GolombRuler {\n"
         s += f"  order:\t{self.order()}\n"
         s += f"  sequence:\t{self.sequence}\n"
-        s += f"  distances:\t{self.triu_distances()}\n"
+        s += f"  distances triu:  \t{self.triu_distances()}\n"
+        s += f"  distances sorted:\t{sorted(self.triu_distances())}\n"
         s += f"  length:\t{self.length()}\n"
         s += "}"
 
         return s
 
     def order(self) -> int:
-        """Return the order (number of elements in the sequence) of this GolombRuler."""
+        """Return the order (number of elements in the sequence) of this GolombRuler.
+
+
+        Examples:
+        """
+
         return len(self.sequence)
 
     def length(self) -> int:
         """The largest distance of our GolombRuler. To return the number of elements, see `GolombRuler.order`."""
         return max(self.sequence)
 
-
     def d_plus_e(self) -> str:
         """Return a string representation of the d plus e model."""
-
 
     # ---------------------------------------------------------------------------- #
     #               Functions dealing with upper triangular matrices               #
@@ -79,8 +86,8 @@ class GolombRuler:
         distances: list[int] = [0 for _ in range(self.triu_size())]
         idx = 0
 
-        for (lhs_idx, lhs) in enumerate(self.sequence):
-            for rhs in self.sequence[(lhs_idx + 1):]:
+        for lhs_idx, lhs in enumerate(self.sequence):
+            for rhs in self.sequence[(lhs_idx + 1) :]:
                 distances[idx] = dist(lhs, rhs)
                 idx += 1
 
@@ -97,13 +104,17 @@ class GolombRuler:
         """
         # Assume that the first mark is 0.
         marks = [0]
-        marks.extend(distances[:(order - 1)])
+        marks.extend(distances[: (order - 1)])
         return GolombRuler(marks)
 
     @staticmethod
     def generate_naive(order: int) -> GolombRuler:
-        return GolombRuler(generate_golomb_ruler_naive(order), assert_golomb_property=False)
+        return GolombRuler(
+            generate_golomb_ruler_naive(order), assert_golomb_property=False
+        )
 
     @staticmethod
     def generate_improved(order: int) -> GolombRuler:
-        return GolombRuler(generate_golomb_ruler_improved(order), assert_golomb_property=False)
+        return GolombRuler(
+            generate_golomb_ruler_improved(order), assert_golomb_property=False
+        )

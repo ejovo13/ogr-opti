@@ -2,15 +2,15 @@
 
 from ..solvers import *
 
+
 def ampl_choose_solver(solver: AMPLSolver) -> str:
     """Return the AMPL source code that sets the solver to `solver`."""
-    return (
-        f"""
+    return f"""
         option solver {solver.ampl_name()};
         solve;
         display d;
         """
-    )
+
 
 def ogr_integer_lp_model(order: int, upper_bound: int) -> str:
     """Return the ampl source code defining the integere linear programming formulation of OGR."""
@@ -19,10 +19,7 @@ def ogr_integer_lp_model(order: int, upper_bound: int) -> str:
         param upper_bound = {upper_bound};
         param order = {order};
         """
-
-        +
-
-        """
+        + """
         set N = {1..order};
         set V = {1..upper_bound};
         set pairs = {i in N, j in (i + 1)..order};
@@ -45,8 +42,5 @@ def ogr_integer_lp_model(order: int, upper_bound: int) -> str:
 
 
 def ogr_integer_lp(order: int, upper_bound: int, solver: AMPLSolver) -> str:
-    """Return the complete ampl source code that loads an instance and solves """
-    return (
-        ogr_integer_lp_model(order, upper_bound) +
-        ampl_choose_solver(solver)
-    )
+    """Return the complete ampl source code that loads an instance and solves"""
+    return ogr_integer_lp_model(order, upper_bound) + ampl_choose_solver(solver)

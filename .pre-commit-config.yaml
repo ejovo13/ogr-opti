@@ -1,0 +1,8 @@
+exclude: 'test|docs|tex|.dat|.mod'
+# include: '.py'
+repos:
+-   repo: meta
+    hooks:
+    -   id: identity
+    
+# -   repo: https://github.com/pre-commit-pre-commit-hooks

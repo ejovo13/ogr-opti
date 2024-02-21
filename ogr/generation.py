@@ -12,8 +12,10 @@ from .utils import compute_distances, dist
 
 def generate_golomb_ruler_naive(order: int) -> list[int]:
     """Naively generate a new golomb ruler with `order` marks."""
-    if order < 1: ValueError("order must be greater than 0")
-    if order == 1: return [0]
+    if order < 1:
+        ValueError("order must be greater than 0")
+    if order == 1:
+        return [0]
 
     prev = generate_golomb_ruler_naive(order - 1)
     next = 2 ** (order - 1) - 1
@@ -21,22 +23,28 @@ def generate_golomb_ruler_naive(order: int) -> list[int]:
 
     return prev
 
+
 def generate_golomb_ruler_improved(order: int) -> list[int]:
     """Generate a golomb ruler with order `order` using an improved algorithm.
 
     This algorithm runs in O(n^4)
     """
-    if order < 1: ValueError("order must be greater than 0")
-    if order == 1: return [0]
-    if order == 2: return [0, 1]
-    if order == 3: return [0, 1, 3]
+    if order < 1:
+        ValueError("order must be greater than 0")
+    if order == 1:
+        return [0]
+    if order == 2:
+        return [0, 1]
+    if order == 3:
+        return [0, 1, 3]
 
     prev = generate_golomb_ruler_improved(order - 1)
 
-
     # Compute the differences
-    distances = compute_distances(prev) # O(n^2)
-    candidate_upper_bound = 2 * prev[-1] + 1 # Guarantees that we will accept at least one candidate
+    distances = compute_distances(prev)  # O(n^2)
+    candidate_upper_bound = (
+        2 * prev[-1] + 1
+    )  # Guarantees that we will accept at least one candidate
 
     def should_accept_candidate(candidate: int) -> bool:
         """Utility function used to check if a candidate should be accepted.
@@ -63,6 +71,7 @@ def generate_golomb_ruler_improved(order: int) -> list[int]:
             return sorted(prev)
 
     raise Exception("Implementation Error!!!")
+
 
 # def main():
 
