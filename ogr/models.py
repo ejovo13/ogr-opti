@@ -1,21 +1,20 @@
 """Module that facilities the automatic generation and execution of OGR models using ampl."""
+from __future__ import annotations
 
-
-from shutil import which
-from .exceptions import AMPLNotFound, SolveError, NotGolombRuler
-from .exploration import GolombRuler
-from .ampl import ogr_integer_lp
-from .solvers import AMPLSolver
-from enum import Enum
-from collections.abc import Callable
 from appdirs import user_data_dir
-from random import randint
+from collections.abc import Callable
+from enum import Enum
 from os.path import join, exists
 from os import makedirs, remove
+from random import randint
+from shutil import which
 import time
-
 import subprocess
 
+from .exceptions import AMPLNotFound, NotGolombRuler, SolveError
+from .ruler import GolombRuler
+from .ampl import ogr_integer_lp
+from .solvers import AMPLSolver
 # First check if ampl exists on this machine
 _AMPL_PATH = which("ampl")
 if _AMPL_PATH is None:
@@ -36,6 +35,21 @@ class Formulations(Enum):
         """Return the function that generates the AMPL source code implementing this formulation."""
         if self == Formulations.IntegerLinearProgram:
             return ogr_integer_lp
+
+    def from_str(input: str) -> Formulations:
+        """Raises `ValueError` on bad input."""
+        input = input.lower()
+        if input == "ilp":
+            return Formulations.IntegerLinearProgram
+        elif input == "ilpr":
+            return Formulations.IntegerLinearProgramRelaxation
+        elif input == "cp":
+            return Formulations.ConstraintProgram
+        elif input == "qp":
+            return Formulations.QuadraticProgram
+        else:
+            raise ValueError
+
 
 
 

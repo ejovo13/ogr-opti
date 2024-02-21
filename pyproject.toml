@@ -22,9 +22,10 @@ polars = "^0.20.1"
 altair-viewer = "^0.4.0"
 
 [tool.poetry.scripts]
-solve = "run:solve"
+solve_demo = "run:solve"
 ruler = "ogr.exploration:main"
 gen = "run:generate_rulers"
+solve = "ogr.scripts:solve"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.3"

@@ -13,3 +13,6 @@ class FormulationNotImplemented(Exception):
 
 class SolveError(Exception):
     """Used to indicate that something went wrong on AMPL's side of things."""
+
+class OrderTooLarge(Exception):
+    """Used when we are requesting to solve infeasible ogr problems."""
