@@ -1,7 +1,4 @@
-# Linear Programming model of a hardcoded order 3 golomb ruler.
-
-# Tasks for generalization:
-# express the distance variables as an upper triangualar matrix?
+# Linear Programming model of the Optimal Golomb Ruler problem
 
 param upper_bound;
 param order;
