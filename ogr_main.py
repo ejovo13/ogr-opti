@@ -4,8 +4,7 @@
 import argparse
 import random
 
-import ogr_rust as ogr
-
+import ogr_rust
 
 def main():
     parser = argparse.ArgumentParser(prog="OGR")
@@ -20,12 +19,12 @@ def main():
     parser_enum.add_argument(
         "-g", "--golomb", action="store_true", help="Keep only golomb rulers"
     )
-    parser_enum.add_argument(
-        "-x",
-        "--exact",
-        action="store_true",
-        help="Only print rulers whose length matches `length` exactly",
-    )
+    # parser_enum.add_argument(
+    #     "-x",
+    #     "--exact",
+    #     action="store_true",
+    #     help="Only print rulers whose length matches `length` exactly",
+    # )
 
     parser_search = subparsers.add_parser("search", help="Look for an optimal ruler")
     parser_search.add_argument(
@@ -68,16 +67,14 @@ def main():
 
     if args.subcommand == "enum":
         print("Executing enum!")
-        rulers = ogr.enumerate_rulers(args.length)
+
+        if args.order is not None:
+            rulers = ogr_rust.enumerate_pruned_rulers(args.order, args.length)
+        else:
+            rulers = ogr_rust.enumerate_rulers_with_length(args.length)
 
         if args.golomb:
             rulers = [r for r in rulers if r.is_golomb_ruler()]
-
-        if args.order is not None:
-            rulers = [r for r in rulers if r.order() == args.order]
-
-        if args.exact:
-            rulers = [r for r in rulers if r.length() == args.length]
 
         for r in rulers:
             print(r)
@@ -94,7 +91,7 @@ def main():
 
         # We want to iterate non stop until we've found a ruler
         for i in range(10):
-            print(i, ogr.Ruler.from_id(i))
+            print(i, ogr_rust.Ruler.from_id(i))
 
     elif args.subcommand == "rand":
         print("Rand!")
@@ -116,10 +113,10 @@ def main():
         print("-------")
         for i in range(args.start, args.start + args.n):
             if args.state:
-                r = ogr.Ruler.from_id(i)
+                r = ogr_rust.Ruler.from_id(i)
                 print(f"[{i:5}] {str(r)[:20]}\t{r.to_state()}")
             else:
-                print(f"[{i:5}] {ogr.Ruler.from_id(i)}")
+                print(f"[{i:5}] {ogr_rust.Ruler.from_id(i)}")
 
 
 # ---------------------------------------------------------------------------- #
@@ -142,7 +139,7 @@ def range_ruler_length(length: int) -> tuple[int, int]:
 
 def get_random_ruler_length(length: int):
     range = range_ruler_length(length)
-    return ogr.Ruler.from_id(random.randint(range[0], range[1]))
+    return ogr_rust.Ruler.from_id(random.randint(range[0], range[1]))
 
 
 def erdos_turan(odd_prime: int) -> list[int]:
